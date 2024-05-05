@@ -1,29 +1,29 @@
 {
-  "start": "room1",
+  "start": "A white room",
   "rooms": [
     {
-      "name": "room1",
-      "desc": "You are in a small room with white walls.",
-      "exits": {
-        "north": "room2",
-        "east": "room3"
-      },
-      "items": ["key", "book"]
+      "name": "A white room",
+      "desc": "You are in a simple room with white walls.",
+      "exits": {"north": "A blue room", "east": "A red room"},
+      "items": ["key"]
     },
     {
-      "name": "room2",
-      "desc": "You are in a dark room with a flickering torch on the wall.",
-      "exits": {
-        "south": "room1"
-      },
-      "items": ["torch"]
+      "name": "A blue room",
+      "desc": "This room is simple, too, but with blue walls.",
+      "exits": {"east": "A green room", "south": "A white room"},
+      "items": ["sword"]
     },
     {
-      "name": "room3",
-      "desc": "You are in a large room with a wooden table in the center.",
-      "exits": {
-        "west": "room1"
-      }
+      "name": "A green room",
+      "desc": "You are in a simple room, with bright green walls.",
+      "exits": {"west": "A blue room", "south": "A red room"},
+      "items": ["shield"]
+    },
+    {
+      "name": "A red room",
+      "desc": "This room is fancy. It's red!",
+      "exits": {"north": "A green room", "west": "A white room"},
+      "items": []
     }
   ]
 }
