@@ -1,29 +1,48 @@
 {
-  "start": "A white room",
+  "start": "Forest Entrance",
   "rooms": [
     {
-      "name": "A white room",
-      "desc": "You are in a simple room with white walls.",
-      "exits": {"north": "A blue room", "east": "A red room"},
-      "items": ["key"]
+      "name": "Forest Entrance",
+      "desc": "Sunlight filters through the leaves of towering trees. A path leads deeper into the forest to the north, and a faint trail winds east.",
+      "exits": {
+        "north": "Gloomy Woods",
+        "east": "Hidden Clearing"
+      }
     },
     {
-      "name": "A blue room",
-      "desc": "This room is simple, too, but with blue walls.",
-      "exits": {"east": "A green room", "south": "A white room"},
-      "items": ["sword"]
+      "name": "Gloomy Woods",
+      "desc": "The thick canopy blocks out most of the light. The air is damp and still. A rickety bridge spans a murky stream to the west.",
+      "exits": {
+        "south": "Forest Entrance",
+        "west": "Abandoned Mine"
+      }
     },
     {
-      "name": "A green room",
-      "desc": "You are in a simple room, with bright green walls.",
-      "exits": {"west": "A blue room", "south": "A red room"},
-      "items": ["shield"]
+      "name": "Hidden Clearing",
+      "desc": "A small, sun-dappled clearing. A weathered signpost points north and south. To the west, a narrow path leads into a dense thicket.",
+      "exits": {
+        "west": "Thicket Maze",
+        "south": "Forest Entrance",
+        "north": "Crystal Cave Entrance"
+      }
     },
     {
-      "name": "A red room",
-      "desc": "This room is fancy. It's red!",
-      "exits": {"north": "A green room", "west": "A white room"},
-      "items": []
+      "name": "Abandoned Mine",
+      "desc": "The entrance to an abandoned mine shaft. A rusty pickaxe lies on the ground.",
+      "exits": {
+        "east": "Gloomy Woods",
+        "items": ["rusty pickaxe"]  # Add an item to this room
+      }
+    },
+    {
+      "name": "Thicket Maze",
+      "desc": "A dense maze of bushes and vines. It seems impossible to find a way out.",
+      "exits": {"east": "Hidden Clearing"}  # Limited exits for a maze
+    },
+    {
+      "name": "Crystal Cave Entrance",
+      "desc": "A dark opening leading into a network of crystal caves. A faint blue light emanates from within.",
+      "exits": {"south": "Hidden Clearing"}
     }
   ]
 }
