@@ -1,0 +1,49 @@
+{
+    "start": "Forest Entrance",
+    "rooms": [
+      {
+        "name": "Forest Entrance",
+        "desc": "Sunlight filters through the leaves of towering trees. A path leads deeper into the forest to the north, and a faint trail winds east.",
+        "exits": {
+          "north": "Gloomy Woods",
+          "east": "Hidden Clearing"
+        }
+      },
+      {
+        "name": "Gloomy Woods",
+        "desc": "The thick canopy blocks out most of the light. The air is damp and still. A rickety bridge spans a murky stream to the west.",
+        "exits": {
+          "south": "Forest Entrance",
+          "west": "Abandoned Mine"
+        }
+      },
+      {
+        "name": "Hidden Clearing",
+        "desc": "A small, sun-dappled clearing. A weathered signpost points north and south. To the west, a narrow path leads into a dense thicket.",
+        "exits": {
+          "west": "Thicket Maze",
+          "south": "Forest Entrance",
+          "north": "Crystal Cave Entrance"
+        }
+      },
+      {
+        "name": "Abandoned Mine",
+        "desc": "The entrance to an abandoned mine shaft. A rusty pickaxe lies on the ground.",
+        "exits": {
+          "east": "Gloomy Woods",
+          "items": ["rusty pickaxe"]  
+        }
+      },
+      {
+        "name": "Thicket Maze",
+        "desc": "A dense maze of bushes and vines. It seems impossible to find a way out.",
+        "exits": {"east": "Hidden Clearing"} 
+      },
+      {
+        "name": "Crystal Cave Entrance",
+        "desc": "A dark opening leading into a network of crystal caves. A faint blue light emanates from within.",
+        "exits": {"south": "Hidden Clearing"}
+      }
+    ]
+  }
+  
