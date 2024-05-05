@@ -1,72 +1,76 @@
 import json
+import sys
 
-def main():
-    """
-    The main entry point for the game.
+class Game:
+    def __init__(self, map_file):
+        with open(map_file, 'r') as f:
+            self.map = json.load(f)
+        self.current_room = self.map['start']
+        self.inventory = []
 
-    Loads the map file, validates it, and starts the game loop.
-    """
+    def print_room(self):
+        room = self.get_room(self.current_room)
+        print(f"> {room['name']}")
+        print(room['desc'])
+        print("Exits:", ', '.join(room['exits'].keys()))
+        if room.get('items'):
+            print("Items:", ', '.join(room['items']))
 
-    # Assuming the map file name is "adventure_game.map"
-    map_file = "adventure_game.map"
+    def get_room(self, room_name):
+        for room in self.map['rooms']:
+            if room['name'] == room_name:
+                return room
+        return None
 
-    try:
-        # Open the map file and load the data
-        with open(map_file, "r") as f:
-            data = json.load(f)
-    except FileNotFoundError:
-        print(f"Error: Map file '{map_file}' not found")
-        sys.exit(1)  # Assuming you want to exit on error even in autograder
-    except json.JSONDecodeError:
-        print(f"Error: Map file '{map_file}' is invalid JSON")
-        sys.exit(1)  # Assuming you want to exit on error even in autograder
-
-    # Validate the map structure
-    validation_error = validate_map(data)
-    if validation_error:
-        print(f"Error: Map validation failed: {validation_error}")
-        sys.exit(1)  # Assuming you want to exit on error even in autograder
-
-    # Initialize game state
-    current_room = data["start"]
-    player_inventory = []
-
-    while True:
-        # Replace this with the autograder's input mechanism
-        command = input("> ").lower().strip()
-
-        # Handle various commands
-        if command == "quit":
-            break
-        elif command in ["north", "south", "east", "west"]:
-            # Check for valid direction in current room exits
-            if command not in current_room["exits"]:
-                print(f"You can't go {command}.")
-            else:
-                current_room = data["rooms"][current_room["exits"][command]]
-        elif command == "look":
-            print(current_room["desc"])
-        elif command == "get":
-            # Check for item in current room and add to inventory
-            if "items" not in current_room or len(current_room["items"]) == 0:
-                print("There is nothing here to get.")
-            else:
-                item = current_room["items"][0]
-                player_inventory.append(item)
-                current_room["items"].remove(item)
-                print(f"You picked up {item}.")
-        elif command == "inventory":
-            if not player_inventory:
-                print("Your inventory is empty.")
-            else:
-                print("You are carrying:")
-                for item in player_inventory:
-                    print(f"- {item}")
+    def go(self, direction):
+        room = self.get_room(self.current_room)
+        if direction in room['exits']:
+            self.current_room = room['exits'][direction]
+            self.print_room()
         else:
-            print(f"I don't understand '{command}'.")
+            print("There's no way to go", direction)
 
-    print("Thanks for playing!")
+    def get(self, item):
+        room = self.get_room(self.current_room)
+        if item in room.get('items', []):
+            self.inventory.append(item)
+            room['items'].remove(item)
+            print(f"You pick up the {item}.")
+        else:
+            print(f"There's no {item} anywhere.")
 
+    def inventory(self):
+        if not self.inventory:
+            print("You're not carrying anything.")
+        else:
+            print("Inventory:")
+            for item in self.inventory:
+                print(f"  {item}")
 
-if __name__ == "__main__":
-    main()
+    def quit(self):
+        print("Goodbye!")
+        sys.exit(0)
+
+    def play(self):
+        while True:
+            self.print_room()
+            command = input("What would you like to do? ").lower()
+            if command.startswith('go '):
+                self.go(command[3:])
+            elif command.startswith('get '):
+                self.get(command[4:])
+            elif command == 'look':
+                self.print_room()
+            elif command == 'inventory':
+                self.inventory()
+            elif command == 'quit':
+                self.quit()
+            else:
+                print("Sorry, I didn't understand that.")
+
+if __name__ == '__main__':
+    if len(sys.argv)!= 2:
+        print("Usage: python3 adventure.py <map_file>")
+        sys.exit(1)
+    game = Game(sys.argv[1])
+    game.play()
