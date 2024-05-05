@@ -1,50 +1,3 @@
-import json
-import sys
-
-
-def validate_map(data):
-    """
-    Validates a map file against the expected schema.
-
-    Args:
-        data: The map data loaded from a JSON file.
-
-    Returns:
-        A string containing an error message if validation fails, None otherwise.
-    """
-    if "start" not in data or "rooms" not in data:
-        return "Map is missing required fields: 'start' or 'rooms'"
-
-    rooms = data["rooms"]
-    for room in rooms:
-        if "name" not in room or "desc" not in room or "exits" not in room:
-            return (
-                "Room is missing required fields: 'name', 'desc', or 'exits'"
-            )
-        if not isinstance(room["name"], str):
-            return f"Room name '{room['name']}' is not a string"
-        if not isinstance(room["desc"], str):
-            return f"Room description '{room['desc']}' is not a string"
-        if not isinstance(room["exits"], dict):
-            return f"Room exits '{room['exits']}' is not a dictionary"
-        for direction, exit_id in room["exits"].items():
-            if not isinstance(direction, str):
-                return f"Exit direction '{direction}' is not a string"
-            if exit_id not in [room["name"] for room in rooms]:
-                return f"Room '{room['name']}' exits to invalid room '{exit_id}'"
-        if "items" in room and not isinstance(room["items"], list):
-            return f"Room items '{room['items']}' is not a list"
-        for item in room.get("items", []):
-            if not isinstance(item, str):
-                return f"Room item '{item}' is not a string"
-
-    start_room = data["start"]
-    if start_room not in [room["name"] for room in rooms]:
-        return f"Start room '{start_room}' does not exist"
-
-    return None
-
-
 def main():
     """
     The main entry point for the game.
@@ -71,10 +24,45 @@ def main():
         print(f"Error: Map validation failed: {validation_error}")
         sys.exit(1)
 
-    # Implement the game loop, including handling user input, parsing commands,
-    # updating the game state, and printing output
-    # ...
+    # Initialize game state
+    current_room = data["start"]
+    player_inventory = []
 
+    while True:
+        # Get user input
+        command = input("> ").lower().strip()
+
+        # Handle commands
+        if command == "quit":
+            break
+        elif command in ["north", "south", "east", "west"]:
+            # Check for valid direction in current room exits
+            if command not in current_room["exits"]:
+                print(f"You can't go {command}.")
+            else:
+                current_room = data["rooms"][current_room["exits"][command]]
+        elif command == "look":
+            print(current_room["desc"])
+        elif command == "get":
+            # Check for item in current room and add to inventory
+            if "items" not in current_room or len(current_room["items"]) == 0:
+                print("There is nothing here to get.")
+            else:
+                item = current_room["items"][0]
+                player_inventory.append(item)
+                current_room["items"].remove(item)
+                print(f"You picked up {item}.")
+        elif command == "inventory":
+            if not player_inventory:
+                print("Your inventory is empty.")
+            else:
+                print("You are carrying:")
+                for item in player_inventory:
+                    print(f"- {item}")
+        else:
+            print(f"I don't understand '{command}'.")
+
+    print("Thanks for playing!")
 
 if __name__ == "__main__":
     main()
