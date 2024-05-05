@@ -1,3 +1,5 @@
+import json
+
 def main():
     """
     The main entry point for the game.
