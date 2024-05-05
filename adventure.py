@@ -22,10 +22,26 @@ class TextAdventure:
             self.process_command(command)
 
     def print_room_description(self):
-        room_info = self.map_data["rooms"][self.current_room]
-        print(f"> {room_info['name']}\n\n{room_info['desc']}\n")
-        self.print_exits(room_info)
-        self.print_inventory()
+    # Find the index of the current room based on its name
+        current_room_index = None
+    for i, room in enumerate(self.map_data["rooms"]):
+        if room["name"] == self.current_room:
+            current_room_index = i
+            break
+    
+    if current_room_index is not None:
+        # Access the room information using the integer index
+        room_info = self.map_data["rooms"][current_room_index]
+        # Print the room description
+        print("> " + room_info["name"] + "\n")
+        print(room_info["desc"] + "\n")
+        # Print exits
+        exits = room_info["exits"]
+        print("Exits: " + ", ".join(exits.keys()) + "\n")
+        print("What would you like to do? ", end="")
+    else:
+        print("Error: Current room not found in map data.")
+
 
     def print_exits(self, room_info):
         exits = ", ".join(room_info["exits"].keys())
